@@ -15,6 +15,7 @@ describe('Pet model', () => {
   });
 
   describe('fields', () => {
+    let lastPet;
     before(() => {
       return Pet.create({
         name: 'Max',
@@ -22,51 +23,37 @@ describe('Pet model', () => {
         age: 1,
         breed: 'puff ball',
         description: 'Cute and fast!'
-      });
+      })
+      .then(pet => lastPet = pet);
     });
     it('has a name field', () => {
-      return Pet.findOne()
-        .then(pet => {
-          expect(pet.name).to.be.a('string');
-        });
+      expect(lastPet.name).to.be.a('string');
     });
     it('has an image field', () => {
-      return Pet.findOne()
-        .then(pet => {
-          expect(pet.image).to.be.a('string');
-        });
+      expect(lastPet.image).to.be.a('string');
     });
     it('has an age field', () => {
-      return Pet.findOne()
-        .then(pet => {
-          expect(pet.age).to.be.a('number');
-        });
+      expect(lastPet.age).to.be.a('number');
     });
     it('has a breed field', () => {
-      return Pet.findOne()
-        .then(pet => {
-          expect(pet.breed).to.be.a('string');
-        });
+      expect(lastPet.breed).to.be.a('string');
     });
     it('has a description', () => {
-      return Pet.findOne()
-        .then(pet => {
-          expect(pet.description).to.be.a('string');
-        });
+      expect(lastPet.description).to.be.a('string');
     });
   }); // end describe('fields')
 
   describe('validations', () => {
     it('Requires an image field', () => {
-      const pet = Pet.build();
-        return pet.validate()
-          .then(err => {
-              expect(err).to.be.an('object');
-              expect(err.errors).to.contain.a.thing.with.properties({
-                  path: 'image',
-                  type: 'notNull Violation'
-              });
-          });
+      const pet = Pet.build({});
+      return pet.validate()
+        .then(err => {
+            expect(err).to.be.an('object');
+            expect(err.errors).to.contain.a.thing.with.properties({
+                path: 'image',
+                type: 'notNull Violation'
+            });
+        });
     });
   }); // end describe('validations')
 
