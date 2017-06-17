@@ -56,7 +56,7 @@ describe('User model', () => {
         mike.addInterest(petList[0]),
         mike.addInterest(petList[2])
       ])
-        .then(() => mike.getInterests())
+        .then(() => mike.getInterest())
         .then(interestList => {
           expect(interestList).to.be.an('array');
           expect(interestList).to.have.a.lengthOf(2);
@@ -69,7 +69,7 @@ describe('User model', () => {
         mike.addReject(petList[1]),
         mike.addReject(petList[2])
       ])
-        .then(() => mike.getRejects())
+        .then(() => mike.getReject())
         .then(rejectList => {
           expect(rejectList).to.be.an('array');
           expect(rejectList).to.have.a.lengthOf(2);
