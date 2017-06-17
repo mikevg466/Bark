@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { createStore, applyMiddleware } from 'redux';
 import petReducer from '../../client/redux/pet';
-import { fetchPets } from '../../client/redux/pet';
+import { fetchPets, selectRandomPet } from '../../client/redux/pet';
 import thunkMiddleware from 'redux-thunk';
 
 const db = require('../../server/db');
@@ -72,5 +72,28 @@ describe('Pet reducer', () => {
       expect(newState.selectedPet).to.deep.equal({ name: 'Twitch Jr' });
     });
   }); // end describe('SELECT_PET')
+
+  describe('selectRandomPet dispatcher function', () => {
+    beforeEach('Load petList', () => {
+      testStore.dispatch({ type: 'LOAD_PETS', petList: testPetList });
+    });
+
+    it('sets selectedPet to a random pet from the petList', () => {
+      let newState;
+
+      // set Math.random to be function that returns static number for testing
+      Math.random = () => { return 0 };
+      testStore.dispatch(selectRandomPet());
+
+      newState = testStore.getState();
+      expect(newState.selectedPet).to.deep.equal(testPetList[0]);
+
+      Math.random = () => { return .9 };
+      testStore.dispatch(selectRandomPet());
+
+      newState = testStore.getState();
+      expect(newState.selectedPet).to.deep.equal(testPetList[1]);
+    });
+  }) // end describe(selectRandomPet dispatcher function)
 
 }); // end describe('Pet reducer')
