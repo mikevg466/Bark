@@ -48,6 +48,6 @@ export const fetchPets = () =>
 export const selectRandomPet = () =>
   (dispatch, getState) =>
     {
-      const { petList } = getState().pet;
+      const { petList } = getState().pet || getState();
       dispatch(selectPet(petList[Math.floor(Math.random() * petList.length)]));
     }
