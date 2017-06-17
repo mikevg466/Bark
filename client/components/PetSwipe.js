@@ -5,7 +5,22 @@ import React from 'react';
 const PetSwipe = (props) => {
   return (
     <div>
-      <img src={props.selectedPet && props.selectedPet.image} />
+      <div className="row" >
+        <div className="col-sm-1"></div>
+        <div className="col-sm-10">
+          <img src={props.selectedPet && props.selectedPet.image} />
+        </div>
+        <div className="col-sm-1"></div>
+      </div>
+      <div className="row">
+        <div className="col-sm-2" >
+          <div className="glyphicon glyphicon-arrow-left" />
+        </div>
+        <div className="col-sm-8" ></div>
+        <div className="col-sm-2" >
+          <div className="glyphicon glyphicon-arrow-right" />
+        </div>
+      </div>
     </div>
   )
 }
