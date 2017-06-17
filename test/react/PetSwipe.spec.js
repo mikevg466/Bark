@@ -29,7 +29,7 @@ describe('PetSwipe component', () => {
     expect(petSwipe.find('img').length).to.equal(1);
   });
   it('image should use the seletedPet\'s url', () => {
-    expect(petSwipe.find('img').prop('src')).to.equal(seletedPet.image);
+    expect(petSwipe.find('img').prop('src')).to.equal(selectedPet.image);
   });
 
 }); // end describe('PetSwipe component')
