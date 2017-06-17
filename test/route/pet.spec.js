@@ -82,7 +82,7 @@ describe('Pet Routes', () => {
         .then(res => {
           expect(res.body).to.be.an('object');
           expect(res.body).to.deep.equal(singlePet);
-        })
+        });
     });
     it('PUT updates a pet in the Pet model', () => {
       return agent.put(`/api/pets/${singlePet.id}`, {name: 'Twitch Jr'})
@@ -91,7 +91,7 @@ describe('Pet Routes', () => {
           expect(res.body).to.be.an('object');
           expect(res.body.name).to.equal('Twitch Jr');
           expect(res.body.image).to.equal(singlePet.image);
-        })
+        });
     });
     it('DELETE removes a pet from the Pet model', () => {
       return agent.delete(`/api/pets/${singlePet.id}`)
@@ -100,7 +100,7 @@ describe('Pet Routes', () => {
         .then(petResult => {
           expect(petResult).to.be.an('object');
           expect(petResult).to.be.empty();
-        })
+        });
     });
   }); // end describe('/api/pets/:petId/')
 }); // end describe('Pet Routes')
