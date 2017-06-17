@@ -15,7 +15,7 @@ const data = {
       name: 'Spike',
       image: 'https://s-media-cache-ak0.pinimg.com/736x/a2/42/d5/a242d5a7fca86aeda26676c8627e82c0.jpg',
       age: 8,
-      breed, 'French Bull',
+      breed: 'French Bull',
       description: 'Always happy!'
     },
     {

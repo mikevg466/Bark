@@ -1,5 +1,6 @@
 const app = require('../../server');
-const agent = require('supertest')(app);
+const agent = require('supertest').agent(app);
+const expect = require('chai').expect;
 const db = require('../../server/db');
 const Pet = require('../../server/db/models/pet');
 
@@ -17,7 +18,7 @@ describe('Pet Routes', () => {
       name: 'Spike',
       image: 'https://s-media-cache-ak0.pinimg.com/736x/a2/42/d5/a242d5a7fca86aeda26676c8627e82c0.jpg',
       age: 8,
-      breed, 'French Bull',
+      breed: 'French Bull',
       description: 'Always happy!'
     },
     {
@@ -58,7 +59,8 @@ describe('Pet Routes', () => {
         });
     });
     it('POST adds a new pet to the Pet model', () => {
-      return agent.post('/api/pets', petList[3])
+      return agent.post('/api/pets')
+        .send(petList[3])
         .expect(201)
         .then(res => {
           expect(res.body).to.be.an('object');
@@ -70,7 +72,7 @@ describe('Pet Routes', () => {
         .then(petResult => {
           expect(petResult).to.be.an('object');
           Object.keys(petList[3]).forEach(key => {
-            expect(res.body[key]).to.equal(petList[3][key]);
+            expect(petResult[key]).to.equal(petList[3][key]);
           });
         });
     });
@@ -81,11 +83,15 @@ describe('Pet Routes', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.be.an('object');
-          expect(res.body).to.deep.equal(singlePet);
+          expect(res.body.name).to.equal(singlePet.name);
+          expect(res.body.image).to.equal(singlePet.image);
+          expect(res.body.age).to.equal(singlePet.age);
+          expect(res.body.description).to.equal(singlePet.description);
         });
     });
     it('PUT updates a pet in the Pet model', () => {
-      return agent.put(`/api/pets/${singlePet.id}`, {name: 'Twitch Jr'})
+      return agent.put(`/api/pets/${singlePet.id}`)
+        .send({name: 'Twitch Jr'})
         .expect(201)
         .then(res => {
           expect(res.body).to.be.an('object');
@@ -98,8 +104,7 @@ describe('Pet Routes', () => {
         .expect(204)
         .then(res => Pet.findById(singlePet.id))
         .then(petResult => {
-          expect(petResult).to.be.an('object');
-          expect(petResult).to.be.empty();
+          expect(petResult).to.be.null;
         });
     });
   }); // end describe('/api/pets/:petId/')
