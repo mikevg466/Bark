@@ -1,5 +1,5 @@
 
-const db = require('../server/db/db');
+const db = require('../server/db');
 const Promise = require('bluebird');
 
 const data = {
@@ -48,7 +48,7 @@ db.sync({force: true})
 .then(() => {
   console.log("Finished inserting seed data");
 })
-.catch(console.error.bind(console));
+.catch(console.error.bind(console))
 .finally(function () {
   db.close(); // creates but does not return a promise
   return null; // stops bluebird from complaining about un-returned promise

@@ -7,6 +7,7 @@ import { Router, Route, browserHistory, IndexRoute, IndexRedirect } from 'react-
 import store from './store';
 import { Main, Login, Signup, UserHome, LoginHome } from './components';
 import { me } from './redux/user';
+import { fetchPets, selectRandomPet } from './redux/pet';
 
 const whoAmI = store.dispatch(me());
 
@@ -19,18 +20,24 @@ const requireLogin = (nextRouterState, replace, next) =>
     })
     .catch(err => console.log(err));
 
+const onEnterUserHome = () =>
+  store.dispatch(fetchPets())
+    .then(() => store.dispatch(selectRandomPet()))
+    .catch(console.error.bind(console));
+
+
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/" component={Main}>
-        <IndexRoute component={Main} />
-          <Route onEnter={requireLogin}>
-            <Route path="home" component={UserHome} />
+  <Provider store={ store }>
+    <Router history={ browserHistory }>
+      <Route path="/" component={ Main }>
+        <IndexRoute component={ Main } />
+          <Route onEnter={ requireLogin }>
+            <Route path="home" component={ UserHome } onEnter={ onEnterUserHome } />
           </Route>
-          <Route path="loginHome" component={LoginHome} />
-          <Route path="login" component={Login} />
-          <Route path="signup" component={Signup} />
+          <Route path="loginHome" component={ LoginHome } />
+          <Route path="login" component={ Login } />
+          <Route path="signup" component={ Signup } />
         <IndexRedirect to="home" />
       </Route>
     </Router>

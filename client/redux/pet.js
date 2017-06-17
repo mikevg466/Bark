@@ -6,8 +6,8 @@ const SELECT_PET = 'SELECT_PET';
 
 
 // ------ ACTION CREATORS -------
-const loadPets = petList => ({ type: LOAD_PETS, petList });
-const selectPet = selectedPet => ({ type: SELECT_PET, selectedPet });
+const loadPets = petList => ({ type: LOAD_PETS, petList: petList || [] });
+const selectPet = selectedPet => ({ type: SELECT_PET, selectedPet: selectedPet || {} });
 
 // ------- INIT STATE --------
 const initState = {
@@ -42,12 +42,12 @@ export default function (state = initState, action) {
 export const fetchPets = () =>
   dispatch =>
     axios.get('/api/pets')
-      .then(res => dispatch(loadPets(res.data || {})))
+      .then(res => dispatch(loadPets(res.data)))
       .catch(console.error.bind(console));
 
 export const selectRandomPet = () =>
   (dispatch, getState) =>
     {
-      const { petList } = getState();
+      const { petList } = getState().pet;
       dispatch(selectPet(petList[Math.floor(Math.random() * petList.length)]));
     }
