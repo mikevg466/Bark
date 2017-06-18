@@ -3,10 +3,25 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PetSwipe from './PetSwipe';
 import { addInterest, addReject } from '../redux/userPet';
+import { selectRandomPet } from '../redux/pet';
 
 class UserHome extends React.Component{
   constructor(){
     super();
+    this.onAddToInterest = this.onAddToInterest.bind(this);
+    this.onAddToReject = this.onAddToReject.bind(this);
+  }
+
+  onAddToInterest(){
+    this.props.addToInterest()
+      .then(() => this.props.updateSelectedPet())
+      .catch(console.error.bind(console));
+  }
+
+  onAddToReject(){
+    this.props.addToReject()
+      .then(() => this.props.updateSelectedPet())
+      .catch(console.error.bind(console));
   }
 
   render(){
@@ -17,8 +32,8 @@ class UserHome extends React.Component{
         <div className="col-sm-8" >
           <PetSwipe
             selectedPet={ this.props.selectedPet }
-            addToInterest={ this.props.addToInterest }
-            addToReject={ this.props.addToReject }
+            addToInterest={ this.onAddToInterest }
+            addToReject={ this.onAddToReject }
           />
         </div>
         <div className="col-sm-2" ></div>
@@ -35,7 +50,8 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   addToInterest: () => dispatch(addInterest()),
-  addToReject: () => dispatch(addReject())
+  addToReject: () => dispatch(addReject()),
+  updateSelectedPet: () => dispatch(selectRandomPet())
 });
 
 export default connect(mapState, mapDispatch)(UserHome);
