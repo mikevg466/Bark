@@ -38,13 +38,15 @@ describe('UserPet reducer', () => {
 
   describe('ADD_INTEREST_PET', () => {
     it('Adds an input object to the interestList', () => {
+      let newState;
+
       testStore.dispatch({ type: 'GET_INTEREST_PETS', interestList: [{ name: 'Twitch' }] });
-      const newState = testStore.getState();
+      newState = testStore.getState();
       expect(newState.interestList).to.have.a.lengthOf(1);
 
       testStore.dispatch({ type: 'ADD_INTEREST_PET', selectedPet: { name: 'Twitch Jr' } });
-      const newState = testStore.getState();
-      expect(newState.interestList).to.have.a.lengthOf(1);
+      newState = testStore.getState();
+      expect(newState.interestList).to.have.a.lengthOf(2);
       expect(newState.interestList[0]).to.deep.equal({ name: 'Twitch' });
       expect(newState.interestList[1]).to.deep.equal({ name: 'Twitch Jr' });
     });
@@ -52,13 +54,15 @@ describe('UserPet reducer', () => {
 
   describe('ADD_REJECT_PET', () => {
     it('Adds an input object to the rejectList', () => {
-      testStore.dispatch({ type: 'ADD_REJECT_PET', interestList: [{ name: 'Twitch' }] });
-      const newState = testStore.getState();
+      let newState;
+
+      testStore.dispatch({ type: 'GET_REJECT_PETS', rejectList: [{ name: 'Twitch' }] });
+      newState = testStore.getState();
       expect(newState.rejectList).to.have.a.lengthOf(1);
 
-      testStore.dispatch({ type: 'ADD_INTEREST_PET', selectedPet: { name: 'Twitch Jr' } });
-      const newState = testStore.getState();
-      expect(newState.rejectList).to.have.a.lengthOf(1);
+      testStore.dispatch({ type: 'ADD_REJECT_PET', selectedPet: { name: 'Twitch Jr' } });
+      newState = testStore.getState();
+      expect(newState.rejectList).to.have.a.lengthOf(2);
       expect(newState.rejectList[0]).to.deep.equal({ name: 'Twitch' });
       expect(newState.rejectList[1]).to.deep.equal({ name: 'Twitch Jr' });
     });
