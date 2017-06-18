@@ -5,6 +5,7 @@ const app = require('../../server');
 const agent = request(app);
 const User = db.model('user');
 const Pet = db.model('pet');
+const PetInterest = require('../../server/db/models/pet_interest');
 
 const testUser = {
   name: 'Mike',
@@ -117,6 +118,60 @@ describe('User routes', () => {
         });
     });
   }); // end describe('/api/users/interests/:userId')
+
+  describe('/api/users/interests/:userId/basic/messages', () => {
+    let curUser, nextPet, testOne, testThree, testFour;
+    beforeEach('create test user and pets and sets associations', () => {
+      return db.sync({ force: true })
+        .then(() => Promise.all([
+          User.create(testUser),
+          Pet.create(testPetList[0]),
+          Pet.create(testPetList[1]),
+          Pet.create(testPetList[2]),
+          Pet.create(testPetList[3])
+        ]))
+        .then(([user, petOne, petTwo, petThree, petFour]) => {
+          curUser = user;
+          nextPet = petTwo;
+          testOne = petOne;
+          testThree = petThree;
+          testFour = petFour;
+          return Promise.all([
+            user.addInterest(petOne),
+            user.addInterest(petThree),
+            user.addInterest(petFour)
+          ]);
+        })
+        .then(() => PetInterest.findAll())
+        .then(petInterestList => Promise.all([
+          petInterestList[0].update({user_message: true}),
+          petInterestList[2].update({user_message: true})
+        ]));
+    });
+
+    it('GET returns a list of all pets that the user sent messages to', () => {
+      return agent.get(`/api/users/interests/${curUser.id}/basic/messages`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.a.lengthOf(2);
+          expect(res.body.some(pet => pet.petId === testOne.id)).to.equal(true);
+          expect(res.body.some(pet => pet.petId === testFour.id)).to.equal(true);
+        })
+    });
+    it('POST sets a message flag on the pet_interests association model', () => {
+      return agent.post(`/api/users/interests/${curUser.id}/basic/messages`)
+        .send(testThree)
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.a.lengthOf(3);
+          expect(res.body.some(pet => pet.petId === testOne.id)).to.equal(true);
+          expect(res.body.some(pet => pet.petId === testFour.id)).to.equal(true);
+          expect(res.body.some(pet => pet.petId === testThree.id)).to.equal(true);
+        })
+    })
+  }); // end describe('/api/users/interests/:userId/basic/messages')
 
   describe('/api/users/rejects/:userId', () => {
     let curUser, nextPet;
