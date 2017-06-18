@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { createStore, applyMiddleware } from 'redux';
-import petReducer from '../../client/redux/pet';
+import combineReducer from '../../client/redux';
 import { fetchPets, selectRandomPet } from '../../client/redux/pet';
 import thunkMiddleware from 'redux-thunk';
 
@@ -11,7 +11,7 @@ describe('Pet reducer', () => {
 
   let testStore;
   beforeEach('Create testing store', () => {
-    testStore = createStore(petReducer, applyMiddleware(thunkMiddleware));
+    testStore = createStore(combineReducer, applyMiddleware(thunkMiddleware));
   });
 
   const testPetList = [
@@ -39,7 +39,7 @@ describe('Pet reducer', () => {
   });
 
   it('has expected initial state', () => {
-    expect(testStore.getState()).to.be.deep.equal({
+    expect(testStore.getState().pet).to.be.deep.equal({
       petList: [],
       selectedPet: {},
     });
@@ -48,14 +48,14 @@ describe('Pet reducer', () => {
   describe('LOAD_PETS', () => {
     it('sets the petList to the input array', () => {
       testStore.dispatch({ type: 'LOAD_PETS', petList: [{ name: 'Twitch' }, { name: 'Twitch Jr' }] });
-      const newState = testStore.getState();
+      const newState = testStore.getState().pet;
       expect(newState.petList[0]).to.deep.equal({ name: 'Twitch' });
       expect(newState.petList[1]).to.deep.equal({ name: 'Twitch Jr' });
     });
     xit('loads all pets using the /api/pets route', () => {
       return testStore.dispatch(fetchPets())
         .then(() => {
-          const newState = testStore.getState();
+          const newState = testStore.getState().pet;
           testPetList.forEach((pet, idx) => {
             Object.keys(pet).forEach(key => {
               expect(newState.petList[idx][key]).to.equal(pet[key]);
@@ -68,7 +68,7 @@ describe('Pet reducer', () => {
   describe('SELECT_PET', () => {
     it('sets the selectedPet to the input object', () => {
       testStore.dispatch({ type: 'SELECT_PET', selectedPet: { name: 'Twitch Jr' } });
-      const newState = testStore.getState();
+      const newState = testStore.getState().pet;
       expect(newState.selectedPet).to.deep.equal({ name: 'Twitch Jr' });
     });
   }); // end describe('SELECT_PET')
@@ -85,13 +85,13 @@ describe('Pet reducer', () => {
       Math.random = () => { return 0 };
       testStore.dispatch(selectRandomPet());
 
-      newState = testStore.getState();
+      newState = testStore.getState().pet;
       expect(newState.selectedPet).to.deep.equal(testPetList[0]);
 
       Math.random = () => { return .9 };
       testStore.dispatch(selectRandomPet());
 
-      newState = testStore.getState();
+      newState = testStore.getState().pet;
       expect(newState.selectedPet).to.deep.equal(testPetList[1]);
     });
   }) // end describe(selectRandomPet dispatcher function)
