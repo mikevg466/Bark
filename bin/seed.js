@@ -32,6 +32,13 @@ const data = {
       breed: 'Greydon',
       description: 'Super playful and full of energy!'
     },
+    {
+      name: 'Grumpy Cat',
+      image: 'https://images-production.global.ssl.fastly.net/uploads/posts/image/47360/grumpy-cat.jpg',
+      age: 15,
+      breed: 'Grupy Persian',
+      description: 'Always grumpy. A real downer...'
+    }
   ]
 };
 
