@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../db');
 const User = require('../db/models/user');
 const Pet = require('../db/models/pet');
+const PetInterest = require('../db/models/pet_interest');
 
 module.exports = router;
 
@@ -79,6 +80,29 @@ router.post('/interests/:userId', (req, res, next) => {
     .then(interestList => res.status(201).json(interestList))
     .catch(next);
 });
+
+
+// GET and POST messages from the basic user to the pet
+router.get('/interests/:userId/basic/messages', (req, res, next) => {
+  PetInterest.findAll({where: {userId: req.user.id, user_message: true}})
+    .then(petInterestList => res.status(200).json(petInterestList))
+    .catch(next);
+});
+
+router.post('/interests/:userId/basic/messages', (req, res, next) => {
+  Pet.findById(req.body.id)
+    .then(pet => {
+      return PetInterest.findOne({where: {userId: req.user.id, petId: pet.id}})
+    })
+    .then(petInterest => {
+      return petInterest.update({user_message: true})
+    })
+    .then(() => PetInterest.findAll({where: {userId: req.user.id, user_message: true}}))
+    .then(petInterestList => res.status(201).json(petInterestList))
+    .catch(next);
+});
+
+
 
 // rejects
 router.get('/rejects/:userId', (req, res, next) => {
