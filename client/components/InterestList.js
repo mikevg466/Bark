@@ -24,7 +24,14 @@ const InterestList = (props) => {
                       <img src={pet.image} />
                     </div>
                   </td>
-                  <td></td>
+                  <td className="center">
+                    <ul>
+                      <li>name: {pet.name}</li>
+                      <li>age: {pet.age}</li>
+                      <li>breed: {pet.breed}</li>
+                      <li>description: {pet.description}</li>
+                    </ul>
+                  </td>
                   <td>{
                     <a className="btn btn-success">
                       Message {pet.name}!
