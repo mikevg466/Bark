@@ -10,6 +10,7 @@ import UserHome from './containers/UserHome';
 import { me } from './redux/user';
 import { fetchPets, selectRandomPet } from './redux/pet';
 import { fetchInterests, fetchRejects, addInterest, addReject } from './redux/userPet';
+import InterestList from './components/InterestList';
 
 const whoAmI = store.dispatch(me());
 
@@ -31,6 +32,9 @@ const onEnterUserHome = () =>
     .then(() => store.dispatch(selectRandomPet()))
     .catch(console.error.bind(console));
 
+const onEnterInterestList = () =>
+  store.dispatch(fetchInterests())
+    .catch(console.error.bind(console));
 
 
 ReactDOM.render(
@@ -40,6 +44,7 @@ ReactDOM.render(
         <IndexRoute component={ Main } />
           <Route onEnter={ requireLogin }>
             <Route path="home" component={ UserHome } onEnter={ onEnterUserHome } />
+            <Route path="interests" component={ InterestList } onEnter={ onEnterInterestList } />
           </Route>
           <Route path="loginHome" component={ LoginHome } />
           <Route path="login" component={ Login } />
