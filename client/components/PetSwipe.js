@@ -16,7 +16,9 @@ const PetSwipe = (props) => {
         <div className="col-sm-2" >
           <div className="glyphicon glyphicon-arrow-left" />
         </div>
-        <div className="col-sm-8" ></div>
+        <div className="col-sm-8 text-center" >
+          <h1>{props.selectedPet && props.selectedPet.name}</h1>
+        </div>
         <div className="col-sm-2" >
           <div className="glyphicon glyphicon-arrow-right" />
         </div>
