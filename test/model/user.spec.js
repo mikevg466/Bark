@@ -77,6 +77,20 @@ describe('User model', () => {
           expect(rejectList[1].name).to.equal(petList[2].name);
         });
     });
+
+    it('User can associate to pets they set as adoptable', () => {
+      return Promise.all([
+        mike.addAdopt(petList[1]),
+        mike.addAdopt(petList[2])
+      ])
+        .then(() => mike.getAdopt())
+        .then(adoptionList => {
+          expect(adoptionList).to.be.an('array');
+          expect(adoptionList).to.have.a.lengthOf(2);
+          expect(adoptionList[0].name).to.equal(petList[1].name);
+          expect(adoptionList[1].name).to.equal(petList[2].name);
+        });
+    });
   }); // end describe('Pet associations');
 
   describe('instanceMethods', () => {

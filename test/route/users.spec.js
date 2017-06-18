@@ -219,6 +219,54 @@ describe('User routes', () => {
           expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
         });
     });
-  }) // end describe('/api/users/rejects/:userId')
+  }); // end describe('/api/users/rejects/:userId')
+
+  describe('/api/users/adoptions/:userId', () => {
+    let curUser, nextPet;
+    beforeEach('create test user and pets and sets associations', () => {
+      return db.sync({ force: true })
+        .then(() => Promise.all([
+          User.create(testUser),
+          Pet.create(testPetList[0]),
+          Pet.create(testPetList[1]),
+          Pet.create(testPetList[2]),
+          Pet.create(testPetList[3])
+        ]))
+        .then(([user, petOne, petTwo, petThree, petFour]) => {
+          curUser = user;
+          nextPet = petTwo;
+          return Promise.all([
+            user.addAdopt(petOne),
+            user.addAdopt(petThree),
+            user.addAdopt(petFour)
+          ]);
+        });
+    });
+
+    it('GET returns a list of all Pets set to adoptable by the user', () => {
+      return agent.get(`/api/users/adoptions/${curUser.id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.a.lengthOf(3);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
+        });
+    });
+    it('POST sets a pet to the adoption list for the user', () => {
+      return agent.post(`/api/users/adoptions/${curUser.id}`)
+        .send(nextPet)
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.a.lengthOf(4);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[1].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
+        })
+    });
+  }); // describe('/api/users/adoptions/:userId')
 
 }); // end describe('User routes')
