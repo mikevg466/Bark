@@ -15,6 +15,7 @@ describe('UserPet reducer', () => {
     expect(testStore.getState()).to.be.deep.equal({
       interestList: [],
       rejectList: [],
+      messageList: [],
     });
   });
 
@@ -25,7 +26,7 @@ describe('UserPet reducer', () => {
       expect(newState.interestList[0]).to.deep.equal({ name: 'Twitch' });
       expect(newState.interestList[1]).to.deep.equal({ name: 'Twitch Jr' });
     });
-  }); // end describe('LOAD_PETS')
+  }); // end describe('GET_INTEREST_PETS')
 
   describe('GET_REJECT_PETS', () => {
     it('sets the rejectList to the input array', () => {
@@ -34,7 +35,16 @@ describe('UserPet reducer', () => {
       expect(newState.rejectList[0]).to.deep.equal({ name: 'Twitch' });
       expect(newState.rejectList[1]).to.deep.equal({ name: 'Twitch Jr' });
     });
-  }); // end describe('SELECT_PET')
+  }); // end describe('GET_REJECT_PETS')
+
+  describe('GET_MESSAGES', () => {
+    it('sets the messageList to the input array', () => {
+      testStore.dispatch({ type: 'GET_MESSAGES', messageList: [{ name: 'Twitch' }, { name: 'Twitch Jr' }] });
+      const newState = testStore.getState();
+      expect(newState.messageList[0]).to.deep.equal({ name: 'Twitch' });
+      expect(newState.messageList[1]).to.deep.equal({ name: 'Twitch Jr' });
+    });
+  }); // end describe('GET_MESSAGES')
 
   describe('ADD_INTEREST_PET', () => {
     it('Adds an input object to the interestList', () => {
