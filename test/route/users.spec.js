@@ -71,9 +71,9 @@ describe('User routes', () => {
   }); // end describe('/api/users')
 
   describe('/api/users/interests/:userId', () => {
-    let curUser;
+    let curUser, nextPet;
     beforeEach('create test user and pets and sets associations', () => {
-      db.sync({ force: true })
+      return db.sync({ force: true })
         .then(() => Promise.all([
           User.create(testUser),
           Pet.create(testPetList[0]),
@@ -83,9 +83,12 @@ describe('User routes', () => {
         ]))
         .then(([user, petOne, petTwo, petThree, petFour]) => {
           curUser = user;
-          user.addInterest(petOne);
-          user.addInterest(petThree);
-          user.addInterest(petFour);
+          nextPet = petTwo;
+          return Promise.all([
+            user.addInterest(petOne),
+            user.addInterest(petThree),
+            user.addInterest(petFour)
+          ]);
         });
     });
 
@@ -95,49 +98,70 @@ describe('User routes', () => {
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.a.lengthOf(3);
-          expect(res.body.some(pet => pet.name === testPetList.[0].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[2].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[3].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
         });
     });
     it('POST sets a pet to the interested list for the user', () => {
       return agent.post(`/api/users/interests/${curUser.id}`)
-        .send(testPetList[1])
+        .send(nextPet)
         .expect(201)
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.a.lengthOf(4);
-          expect(res.body.some(pet => pet.name === testPetList.[0].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[1].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[2].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[3].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[1].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
         });
     });
   }); // end describe('/api/users/interests/:userId')
 
   describe('/api/users/rejects/:userId', () => {
+    let curUser, nextPet;
+    beforeEach('create test user and pets and sets associations', () => {
+      return db.sync({ force: true })
+        .then(() => Promise.all([
+          User.create(testUser),
+          Pet.create(testPetList[0]),
+          Pet.create(testPetList[1]),
+          Pet.create(testPetList[2]),
+          Pet.create(testPetList[3])
+        ]))
+        .then(([user, petOne, petTwo, petThree, petFour]) => {
+          curUser = user;
+          nextPet = petTwo;
+          return Promise.all([
+            user.addReject(petOne),
+            user.addReject(petThree),
+            user.addReject(petFour)
+          ]);
+        });
+    });
+
     it('GET returns a list of all Pets set to rejected for the user', () => {
       return agent.get(`/api/users/rejects/${curUser.id}`)
         .expect(200)
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.a.lengthOf(3);
-          expect(res.body.some(pet => pet.name === testPetList.[0].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[2].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[3].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
         });
     });
     it('POST sets a pet to the rejected list for the user', () => {
       return agent.post(`/api/users/rejects/${curUser.id}`)
-        .send(testPetList[1])
+        .send(nextPet)
         .expect(201)
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.a.lengthOf(4);
-          expect(res.body.some(pet => pet.name === testPetList.[0].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[1].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[2].name)).to.equal(true);
-          expect(res.body.some(pet => pet.name === testPetList.[3].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[0].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[1].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[2].name)).to.equal(true);
+          expect(res.body.some(pet => pet.name === testPetList[3].name)).to.equal(true);
         });
     });
   }) // end describe('/api/users/rejects/:userId')
