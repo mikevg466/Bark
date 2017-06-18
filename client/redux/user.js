@@ -34,9 +34,9 @@ export const me = () =>
     axios.get('/auth/me')
       .then(res => dispatch(getUser(res.data || defaultUser)));
 
-export const auth = (email, password, method) =>
+export const auth = (email, password, method, type) =>
   dispatch =>
-    axios.post(`/auth/${method}`, { email, password })
+    axios.post(`/auth/${method}`, { email, password, type })
       .then(res => {
         dispatch(getUser(res.data));
         browserHistory.push('/');

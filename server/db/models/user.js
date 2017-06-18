@@ -14,7 +14,7 @@ const User = db.define('user', {
     type: Sequelize.STRING(32)
   },
   type: {
-    type: Sequelize.ENUM('ADMIN','BASIC'),
+    type: Sequelize.ENUM('ADMIN','ADOPTER', 'BASIC'),
     defaultValue: 'BASIC'
   },
   email: {

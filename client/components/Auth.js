@@ -20,7 +20,8 @@ const mapDispatch = dispatch => ({
     const formName = evt.target.name;
     const email = evt.target.email.value;
     const password = evt.target.password.value;
-    dispatch(auth(email, password, formName));
+    const type = evt.target.type ? evt.target.type.value : null;
+    dispatch(auth(email, password, formName, type));
   }
 });
 

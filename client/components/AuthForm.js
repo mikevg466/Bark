@@ -16,6 +16,17 @@ const AuthForm = props => {
           <label htmlFor="password"><small>Password</small></label>
           <input name="password" type="password" />
         </div>
+        {
+          name === 'signup' && (
+            <div>
+              <label htmlFor="type"><small>I want to:</small></label>
+              <select name="type" defaultValue={"BASIC"}>
+                <option value="BASIC" >Adopt a Pet!</option>
+                <option value="ADOPTER" >Find a Home!</option>
+              </select>
+            </div>
+          )
+        }
         <div>
           <button type="submit">{ displayName }</button>
         </div>
