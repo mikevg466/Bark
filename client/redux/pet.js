@@ -48,6 +48,12 @@ export const fetchPets = () =>
 export const selectRandomPet = () =>
   (dispatch, getState) =>
     {
-      const { petList } = getState().pet || getState();
+      let { petList } = getState().pet || getState();
+      const { interestList, rejectList } = getState().userPet;
+      petList = petList.filter(pet => {
+        const interestResult = interestList.map(el => el.image).includes(pet.image);
+        const rejectResult = rejectList.map(el => el.image).includes(pet.image);
+        return (!interestResult && !rejectResult);
+      })
       dispatch(selectPet(petList[Math.floor(Math.random() * petList.length)]));
     }
