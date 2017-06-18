@@ -15,13 +15,13 @@ const PetSwipe = (props) => {
       </div>
       <div className="row">
         <div className="col-sm-2" >
-          <div className="glyphicon glyphicon-arrow-left" onClick={ props.selectedPet && props.selectedPet.image ? props.addToReject : null } />
+          <div className="glyphicon larger glyphicon-remove" style={{color: 'red'}} onClick={ props.selectedPet && props.selectedPet.image ? props.addToReject : null } />
         </div>
         <div className="col-sm-8 text-center" >
           <h1>{ props.selectedPet && props.selectedPet.image ? props.selectedPet.name : 'No New Pets!'}</h1>
         </div>
         <div className="col-sm-2" >
-          <div className="glyphicon glyphicon-arrow-right" onClick={ props.selectedPet && props.selectedPet.image ? props.addToInterest : null }/>
+          <div className="glyphicon larger glyphicon-heart larger" style={{color: 'green'}} onClick={ props.selectedPet && props.selectedPet.image ? props.addToInterest : null }/>
         </div>
       </div>
     </div>
