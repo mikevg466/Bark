@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import PetSwipe from '../components/PetSwipe';
 import { addInterest, addReject } from '../redux/userPet';
 import { selectRandomPet } from '../redux/pet';
+import MessageList from '../components/MessageList';
+
 
 class UserHome extends React.Component{
   constructor(){
@@ -25,27 +27,39 @@ class UserHome extends React.Component{
   }
 
   render(){
-    return (
-      <div>
-        <div className="row">
-        <div className="col-sm-2" ></div>
-        <div className="col-sm-8" >
-          <PetSwipe
-            selectedPet={ this.props.selectedPet }
-            addToInterest={ this.onAddToInterest }
-            addToReject={ this.onAddToReject }
+    return this.props.userType === 'BASIC' ?
+      (
+        <div>
+          <div className="row">
+            <div className="col-sm-2" ></div>
+            <div className="col-sm-8" >
+              <PetSwipe
+                selectedPet={ this.props.selectedPet }
+                addToInterest={ this.onAddToInterest }
+                addToReject={ this.onAddToReject }
+              />
+            </div>
+            <div className="col-sm-2" ></div>
+          </div>
+        </div>
+      ) :
+      this.props.userType === 'ADOPTER' ?
+      (
+        <div>
+          <MessageList
+            adoptionList={ this.props.adoptionList }
           />
         </div>
-        <div className="col-sm-2" ></div>
-        </div>
-      </div>
-    );
+      ) :
+      null;
   }
 };
 
 const mapState = state => ({
+  userType: state.user.type,
   email: state.user.email,
-  selectedPet: state.pet.selectedPet
+  selectedPet: state.pet.selectedPet,
+  adoptionList: state.userPet.adoptionList
 });
 
 const mapDispatch = dispatch => ({
@@ -57,6 +71,8 @@ const mapDispatch = dispatch => ({
 export default connect(mapState, mapDispatch)(UserHome);
 
 UserHome.propTypes = {
+  userType: PropTypes.string,
   email: PropTypes.string,
-  selectedPet: PropTypes.object
+  selectedPet: PropTypes.object,
+  adoptionList: PropTypes.array
 };

@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addAdoptMessage } from '../redux/userPet';
 
 // Component //
 
-const InterestList = (props) => {
-  const interestList = props.interestList || [];
-  const messageList = props.messageList || [];
-  const addMessage = props.addMessage;
+const MessageList = (props) => {
+  const adoptionList = props.adoptionList || [];
   return (
     <div>
       <table className="table table-striped">
@@ -19,7 +15,7 @@ const InterestList = (props) => {
               <th></th>
             </tr>
             {
-              interestList.map(pet => {
+              adoptionList.map(pet => {
                return (
                 <tr key={pet.id}>
                   <td>
@@ -27,20 +23,12 @@ const InterestList = (props) => {
                       <img src={pet.image} />
                     </div>
                   </td>
-                  <td className="center">
-                    <ul>
-                      <li>name: {pet.name}</li>
-                      <li>age: {pet.age}</li>
-                      <li>breed: {pet.breed}</li>
-                      <li>description: {pet.description}</li>
-                    </ul>
+                  <td>
                   </td>
                   <td>{
-                    messageList.map(el => el.petId).includes(pet.id) ?
-                      <div className="glyphicon larger glyphicon-heart larger" style={{color: 'green'}} /> :
-                      <a className="btn btn-success" onClick={() => addMessage(pet.id)}>
-                        Message {pet.name}!
-                      </a>
+                    <ul>
+                      <li>USERNAME_HERE: {'MESSAGE FORM HERE'}</li>
+                    </ul>
                   }</td>
                 </tr>
                )
@@ -52,18 +40,4 @@ const InterestList = (props) => {
   )
 }
 
-
-const mapState = state => ({
-  interestList: state.userPet.interestList,
-  messageList: state.userPet.messageList
-});
-
-const mapDispatch = dispatch => ({
-  addMessage: petId => dispatch(addBasicMessage(petId))
-});
-
-export default connect(mapState, mapDispatch)(InterestList);
-
-InterestList.propTypes = {
-  interestList: PropTypes.array
-};
+export default MessageList;

@@ -9,7 +9,7 @@ import { Main, Login, Signup, LoginHome } from './components';
 import UserHome from './containers/UserHome';
 import { me } from './redux/user';
 import { fetchPets, selectRandomPet } from './redux/pet';
-import { fetchInterests, fetchRejects, fetchMessages, addInterest, addReject } from './redux/userPet';
+import { fetchInterests, fetchRejects, fetchMessages, fetchAdoptions, addInterest, addReject } from './redux/userPet';
 import InterestList from './components/InterestList';
 
 const whoAmI = store.dispatch(me());
@@ -27,7 +27,8 @@ const onEnterUserHome = () =>
   Promise.all([
     store.dispatch(fetchPets()),
     store.dispatch(fetchInterests()),
-    store.dispatch(fetchRejects())
+    store.dispatch(fetchRejects()),
+    store.dispatch(fetchAdoptions())
   ])
     .then(() => store.dispatch(selectRandomPet()))
     .catch(console.error.bind(console));

@@ -39,6 +39,14 @@ const data = {
       breed: 'Grupy Persian',
       description: 'Always grumpy. A real downer...'
     }
+  ],
+  user: [
+    {
+      name: 'owner',
+      type: 'ADOPTER',
+      email: 'owner@test.com',
+      password: 'test'
+    }
   ]
 };
 
@@ -52,6 +60,15 @@ db.sync({force: true})
     });
   });
 })
+.then(() => Promise.all([
+  db.model('user').findOne({where: {email: 'owner@test.com'}}),
+  db.model('pet').findOne({where: {name: 'Snowball'}}),
+  db.model('pet').findOne({where: {name: 'Twitch'}})
+]))
+.then(([user, petOne, petTwo]) => Promise.all([
+  user.addAdopt(petOne),
+  user.addAdopt(petTwo)
+]))
 .then(() => {
   console.log("Finished inserting seed data");
 })

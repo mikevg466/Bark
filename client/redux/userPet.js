@@ -4,6 +4,7 @@ import axios from 'axios';
 const GET_INTEREST_PETS = 'GET_INTEREST_PETS';
 const GET_REJECT_PETS = 'GET_REJECT_PETS';
 const GET_MESSAGES = 'GET_MESSAGES';
+const GET_ADOPTION_PETS = 'GET_ADOPTION_PETS';
 const ADD_INTEREST_PET = 'ADD_INTEREST_PET';
 const ADD_REJECT_PET = 'ADD_REJECT_PET';
 
@@ -12,6 +13,7 @@ const ADD_REJECT_PET = 'ADD_REJECT_PET';
 const getInterestPets = interestList => ({ type: GET_INTEREST_PETS, interestList: interestList || [] });
 const getRejectPets = rejectList => ({ type: GET_REJECT_PETS, rejectList: rejectList || [] });
 const getMessages = messageList => ({ type: GET_MESSAGES, messageList: messageList || [] });
+const getAdoptionPets = adoptionList => ({ type: GET_ADOPTION_PETS, adoptionList: adoptionList || []});
 const addInterestPet = selectedPet => ({ type: ADD_INTEREST_PET, selectedPet });
 const addRejectPet = selectedPet => ({ type: ADD_REJECT_PET, selectedPet });
 
@@ -21,6 +23,7 @@ const initState = {
   interestList: [],
   rejectList: [],
   messageList: [],
+  adoptionList: [],
 };
 
 
@@ -39,6 +42,10 @@ export default function (state = initState, action) {
 
     case GET_MESSAGES:
       newState.messageList = action.messageList;
+      break;
+
+    case GET_ADOPTION_PETS:
+      newState.adoptionList = action.adoptionList;
       break;
 
     case ADD_INTEREST_PET:
@@ -82,6 +89,14 @@ export const fetchMessages = () =>
     const user = getState().user;
     return axios.get(`/api/users/interests/${user.id}/basic/messages`)
       .then(res => dispatch(getMessages(res.data)))
+      .catch(console.error.bind(console));
+  }
+
+export const fetchAdoptions = () =>
+  (dispatch, getState) => {
+    const user = getState().user;
+    return axios.get(`/api/users/adoptions/${user.id}`)
+      .then(res => dispatch(getAdoptionPets(res.data)))
       .catch(console.error.bind(console));
   }
 
