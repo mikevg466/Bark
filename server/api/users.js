@@ -1,8 +1,12 @@
 const router = require('express').Router();
+const db = require('../db');
 const User = require('../db/models/user');
+const Pet = require('../db/models/pet');
 
 module.exports = router;
 
+
+/****-----   userId Param    -----*****/
 router.param('userId', (req, res, next, id) => {
   User.findById(id)
     .then(user => {
@@ -48,7 +52,6 @@ router.delete('/:userId', (req, res, next) => {
     .catch(next);
 })
 
-
 /****-----   User Info    -----*****/
 // get user's name
 router.get('/name/:userId', (req, res, next) => {
@@ -58,4 +61,36 @@ router.get('/name/:userId', (req, res, next) => {
 // get user's email
 router.get('/email/:userId', (req, res, next) => {
   res.status(200).json(req.user.email);
+});
+
+
+/****-----   Pet Associations    -----*****/
+// interests
+router.get('/interests/:userId', (req, res, next) => {
+  req.user.getInterest()
+    .then(interestList => res.status(200).json(interestList))
+    .catch(next);
+});
+
+router.post('/interests/:userId', (req, res, next) => {
+  Pet.findById(req.body.id)
+    .then(pet => req.user.addInterest(pet))
+    .then(() => req.user.getInterest())
+    .then(interestList => res.status(201).json(interestList))
+    .catch(next);
+});
+
+// rejects
+router.get('/rejects/:userId', (req, res, next) => {
+  req.user.getReject()
+    .then(interestList => res.status(200).json(interestList))
+    .catch(next);
+});
+
+router.post('/rejects/:userId', (req, res, next) => {
+  Pet.findById(req.body.id)
+    .then(pet => req.user.addReject(pet))
+    .then(() => req.user.getReject())
+    .then(interestList => res.status(201).json(interestList))
+    .catch(next);
 });
