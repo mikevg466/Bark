@@ -3,6 +3,7 @@ import axios from 'axios';
 //------- ACTIONS -------
 const GET_INTEREST_PETS = 'GET_INTEREST_PETS';
 const GET_REJECT_PETS = 'GET_REJECT_PETS';
+const GET_MESSAGES = 'GET_MESSAGES';
 const ADD_INTEREST_PET = 'ADD_INTEREST_PET';
 const ADD_REJECT_PET = 'ADD_REJECT_PET';
 
@@ -10,6 +11,7 @@ const ADD_REJECT_PET = 'ADD_REJECT_PET';
 // ------ ACTION CREATORS -------
 const getInterestPets = interestList => ({ type: GET_INTEREST_PETS, interestList: interestList || [] });
 const getRejectPets = rejectList => ({ type: GET_REJECT_PETS, rejectList: rejectList || [] });
+const getMessages = messageList => ({ type: GET_MESSAGES, messageList: messageList || [] });
 const addInterestPet = selectedPet => ({ type: ADD_INTEREST_PET, selectedPet });
 const addRejectPet = selectedPet => ({ type: ADD_REJECT_PET, selectedPet });
 
@@ -18,6 +20,7 @@ const addRejectPet = selectedPet => ({ type: ADD_REJECT_PET, selectedPet });
 const initState = {
   interestList: [],
   rejectList: [],
+  messageList: [],
 };
 
 
@@ -32,6 +35,10 @@ export default function (state = initState, action) {
 
     case GET_REJECT_PETS:
       newState.rejectList = action.rejectList;
+      break;
+
+    case GET_MESSAGES:
+      newState.messageList = action.messageList;
       break;
 
     case ADD_INTEREST_PET:
@@ -70,6 +77,14 @@ export const fetchRejects = () =>
       .catch(console.error.bind(console));
   }
 
+export const fetchMessages = () =>
+  (dispatch, getState) => {
+    const user = getState().user;
+    return axios.get(`/api/users/interests/${user.id}/basic/messages`)
+      .then(res => dispatch(getMessages(res.data)))
+      .catch(console.error.bind(console));
+  }
+
 export const addInterest = () =>
   (dispatch, getState) => {
     const user = getState().user;
@@ -85,5 +100,13 @@ export const addReject = () =>
     const { selectedPet } = getState().pet;
     return axios.post(`/api/users/rejects/${user.id}`, selectedPet)
       .then(res => dispatch(getRejectPets(res.data)))
+      .catch(console.error.bind(console));
+  }
+
+export const addBasicMessage = petId =>
+  (dispatch, getState) => {
+    const user = getState().user;
+    return axios.post(`/api/users/interests/${user.id}/basic/messages`, {id: petId})
+      .then(res => dispatch(getMessages(res.data)))
       .catch(console.error.bind(console));
   }

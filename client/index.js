@@ -9,7 +9,7 @@ import { Main, Login, Signup, LoginHome } from './components';
 import UserHome from './containers/UserHome';
 import { me } from './redux/user';
 import { fetchPets, selectRandomPet } from './redux/pet';
-import { fetchInterests, fetchRejects, addInterest, addReject } from './redux/userPet';
+import { fetchInterests, fetchRejects, fetchMessages, addInterest, addReject } from './redux/userPet';
 import InterestList from './components/InterestList';
 
 const whoAmI = store.dispatch(me());
@@ -33,7 +33,10 @@ const onEnterUserHome = () =>
     .catch(console.error.bind(console));
 
 const onEnterInterestList = () =>
-  store.dispatch(fetchInterests())
+  Promise.all([
+    store.dispatch(fetchInterests()),
+    store.dispatch(fetchMessages())
+  ])
     .catch(console.error.bind(console));
 
 

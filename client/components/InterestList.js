@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { addBasicMessage } from '../redux/userPet';
 
 // Component //
 
 const InterestList = (props) => {
   const interestList = props.interestList || [];
+  const messageList = props.messageList || [];
+  const addMessage = props.addMessage;
   return (
     <div>
       <table className="table table-striped">
@@ -18,7 +21,7 @@ const InterestList = (props) => {
             {
               interestList.map(pet => {
                return (
-                <tr key={pet.image}>
+                <tr key={pet.id}>
                   <td>
                     <div className="thumbnail list">
                       <img src={pet.image} />
@@ -33,9 +36,11 @@ const InterestList = (props) => {
                     </ul>
                   </td>
                   <td>{
-                    <a className="btn btn-success">
-                      Message {pet.name}!
-                    </a>
+                    messageList.map(el => el.petId).includes(pet.id) ?
+                      <div className="glyphicon larger glyphicon-heart larger" style={{color: 'green'}} /> :
+                      <a className="btn btn-success" onClick={() => addMessage(pet.id)}>
+                        Message {pet.name}!
+                      </a>
                   }</td>
                 </tr>
                )
@@ -49,10 +54,12 @@ const InterestList = (props) => {
 
 
 const mapState = state => ({
-  interestList: state.userPet.interestList
+  interestList: state.userPet.interestList,
+  messageList: state.userPet.messageList
 });
 
 const mapDispatch = dispatch => ({
+  addMessage: petId => dispatch(addBasicMessage(petId))
 });
 
 export default connect(mapState, mapDispatch)(InterestList);
