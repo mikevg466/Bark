@@ -8,6 +8,7 @@ import store from './store';
 import { Main, Login, Signup, UserHome, LoginHome } from './components';
 import { me } from './redux/user';
 import { fetchPets, selectRandomPet } from './redux/pet';
+import { fetchInterests, fetchRejects, addInterest, addReject } from './redux/userPet';
 
 const whoAmI = store.dispatch(me());
 
@@ -21,7 +22,11 @@ const requireLogin = (nextRouterState, replace, next) =>
     .catch(err => console.log(err));
 
 const onEnterUserHome = () =>
-  store.dispatch(fetchPets())
+  Promise.all([
+    store.dispatch(fetchPets()),
+    store.dispatch(fetchInterests()),
+    store.dispatch(fetchRejects())
+  ])
     .then(() => store.dispatch(selectRandomPet()))
     .catch(console.error.bind(console));
 

@@ -55,31 +55,35 @@ export default function (state = initState, action) {
 
 // -------- DISPATCHERS -----------
 export const fetchInterests = () =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
     const user = getState().user;
-    axios.get(`/api/users/interests/${user.id}`)
+    return axios.get(`/api/users/interests/${user.id}`)
       .then(res => dispatch(getInterestPets(res.data)))
       .catch(console.error.bind(console));
+  }
 
 export const fetchRejects = () =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
     const user = getState().user;
-    axios.get(`/api/users/rejects/${user.id}`)
+    return axios.get(`/api/users/rejects/${user.id}`)
       .then(res => dispatch(getRejectPets(res.data)))
       .catch(console.error.bind(console));
+  }
 
 export const addInterest = () =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
     const user = getState().user;
     const { selectedPet } = getState().pet;
-    axios.post(`/api/users/interests/${user.id}`, selectedPet)
+    return axios.post(`/api/users/interests/${user.id}`, selectedPet)
       .then(res => dispatch(getInterestPets(res.data)))
       .catch(console.error.bind(console));
+  }
 
 export const addReject = () =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
     const user = getState().user;
     const { selectedPet } = getState().pet;
-    axios.post(`/api/users/rejects/${user.id}`, selectedPet)
+    return axios.post(`/api/users/rejects/${user.id}`, selectedPet)
       .then(res => dispatch(getRejectPets(res.data)))
       .catch(console.error.bind(console));
+  }

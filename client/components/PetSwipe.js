@@ -14,13 +14,13 @@ const PetSwipe = (props) => {
       </div>
       <div className="row">
         <div className="col-sm-2" >
-          <div className="glyphicon glyphicon-arrow-left" />
+          <div className="glyphicon glyphicon-arrow-left" onClick={ props.addToReject } />
         </div>
         <div className="col-sm-8 text-center" >
           <h1>{props.selectedPet && props.selectedPet.name}</h1>
         </div>
         <div className="col-sm-2" >
-          <div className="glyphicon glyphicon-arrow-right" />
+          <div className="glyphicon glyphicon-arrow-right" onClick={ props.addToInterest }/>
         </div>
       </div>
     </div>
