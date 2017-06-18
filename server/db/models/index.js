@@ -1,14 +1,16 @@
 const db = require('../db');
 const User = require('./user');
 const Pet = require('./pet');
+const PetInterest = require('./pet_interest');
 
-User.belongsToMany(Pet, { as: 'Interest', through: 'pet_interest' });
-User.belongsToMany(Pet, { as: 'Reject', through: 'pet_reject' })
-Pet.belongsToMany(User, { through: 'pet_interest' });
+User.belongsToMany(Pet, { as: 'Interest', through: PetInterest });
+User.belongsToMany(Pet, { as: 'Reject', through: 'pet_rejects' })
+Pet.belongsToMany(User, { through: PetInterest });
 Pet.belongsToMany(User, { through: 'pet_reject' })
 
 module.exports = {
 	db,
 	User,
 	Pet,
+	PetInterest,
 };
