@@ -10,6 +10,8 @@ const ADD_REJECT_PET = 'ADD_REJECT_PET';
 // ------ ACTION CREATORS -------
 const getInterestPets = interestList => ({ type: GET_INTEREST_PETS, interestList: interestList || [] });
 const getRejectPets = rejectList => ({ type: GET_REJECT_PETS, rejectList: rejectList || [] });
+const addInterestPet = selectedPet => ({ type: ADD_INTEREST_PET, selectedPet });
+const addRejectPet = selectedPet => ({ type: ADD_REJECT_PET, selectedPet });
 
 
 // ------- INIT STATE --------
@@ -28,14 +30,26 @@ export default function (state = initState, action) {
       newState.interestList = action.interestList;
       break;
 
-    case REMOVE_USER:
+    case GET_REJECT_PETS:
       newState.rejectList = action.rejectList;
+      break;
+
+    case ADD_INTEREST_PET:
+      newState.interestList = newState.interestList.slice(0);
+      newState.interestList.push(action.selectedPet);
+      break;
+
+    case ADD_REJECT_PET:
+      newState.rejectList = newState.rejectList.slice(0);
+      newState.rejectList.push(action.selectedPet);
       break;
 
     default:
       return state;
 
   }
+
+  return newState;
 }
 
 
