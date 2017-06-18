@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import PetSwipe from './PetSwipe';
+import PetSwipe from '../components/PetSwipe';
 import { addInterest, addReject } from '../redux/userPet';
 import { selectRandomPet } from '../redux/pet';
 
