@@ -107,7 +107,7 @@ router.post('/interests/:userId/basic/messages', (req, res, next) => {
 // rejects
 router.get('/rejects/:userId', (req, res, next) => {
   req.user.getReject()
-    .then(interestList => res.status(200).json(interestList))
+    .then(rejectList => res.status(200).json(rejectList))
     .catch(next);
 });
 
@@ -115,6 +115,22 @@ router.post('/rejects/:userId', (req, res, next) => {
   Pet.findById(req.body.id)
     .then(pet => req.user.addReject(pet))
     .then(() => req.user.getReject())
-    .then(interestList => res.status(201).json(interestList))
+    .then(rejectList => res.status(201).json(rejectList))
+    .catch(next);
+});
+
+// adoptions
+router.get('/adoptions/:userId', (req, res, next) => {
+  req.user.getAdopt()
+    .then(adoptList => res.status(200).json(adoptList))
+    .catch(next);
+})
+
+
+router.post('/adoptions/:userId', (req, res, next) => {
+  Pet.findById(req.body.id)
+    .then(pet => req.user.addAdopt(pet))
+    .then(() => req.user.getAdopt())
+    .then(adoptList => res.status(201).json(adoptList))
     .catch(next);
 });
