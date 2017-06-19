@@ -25,6 +25,7 @@ const createApp = () => app
   .use(morgan('dev'))
   .use(express.static(path.join(__dirname, '..', 'public')))
   .use('/bootstrap', express.static(path.join(__dirname, '..', 'node_modules/bootstrap/dist')))
+  .use('/jquery', express.static(path.join(__dirname, '..', 'node_modules/jquery/dist')))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(session({
