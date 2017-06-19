@@ -1,7 +1,8 @@
 # Bark
 
 ## Description
-
+Bark is a Tinder like application that allows pet owners to place their pets that need to be adopted on this website.
+A user looking to adopt can swipe through pictures of the available pets and message the owner.
 
 ## To start
 ```
@@ -12,7 +13,7 @@ create a secrets.js with keys for:
  * process.env.GOOGLE_CLIENT_ID
  * process.env.GOOGLE_CLIENT_SECRET
  * process.env.GOOGLE_CALLBACK
-npm run start-dev
+yarn start-dev
 ```
 
-You should now be able to enjoy your very own pokeshoppe on http://localhost:8080/
+Check it out on http://localhost:2407/
