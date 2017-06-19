@@ -40,7 +40,7 @@ const data = {
       description: 'Always grumpy. A real downer...'
     },
     {
-      name: 'Repunzel'
+      name: 'Repunzel',
       image: 'https://s-media-cache-ak0.pinimg.com/originals/8c/c7/d6/8cc7d69bc563f2b60fb202237e99ba30.jpg',
       age: 10,
       breed: 'Crazy Long Hair',
