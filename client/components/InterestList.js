@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addBasicMessage } from '../redux/userPet';
+import Navbar from './Navbar';
 
 // Component //
 
@@ -11,6 +12,7 @@ const InterestList = (props) => {
   const addMessage = props.addMessage;
   return (
     <div>
+      <Navbar />
       <table className="table table-striped">
           <tbody>
             {

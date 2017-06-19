@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PetSwipe from '../components/PetSwipe';
 import { addInterest, addReject } from '../redux/userPet';
 import { selectRandomPet } from '../redux/pet';
-import MessageList from '../containers/MessageList';
-
+import MessageList from './MessageList';
+import Navbar from '../components/Navbar';
 
 class UserHome extends React.Component{
   constructor(){
@@ -27,30 +27,32 @@ class UserHome extends React.Component{
   }
 
   render(){
-    return this.props.userType === 'BASIC' ?
-      (
-        <div>
-          <div className="row">
-            <div className="col-sm-2" ></div>
-            <div className="col-sm-8" >
-              <PetSwipe
-                selectedPet={ this.props.selectedPet }
-                addToInterest={ this.onAddToInterest }
-                addToReject={ this.onAddToReject }
-              />
-            </div>
-            <div className="col-sm-2" ></div>
-          </div>
-        </div>
-      ) :
-      this.props.userType === 'ADOPTER' ?
-      (
-        <div>
-          <MessageList
-          />
-        </div>
-      ) :
-      null;
+    return (
+      <div>
+        <Navbar />
+        {
+          this.props.userType === 'BASIC' ?
+            (
+                <div className="row">
+                  <div className="col-sm-2" ></div>
+                  <div className="col-sm-8" >
+                    <PetSwipe
+                      selectedPet={ this.props.selectedPet }
+                      addToInterest={ this.onAddToInterest }
+                      addToReject={ this.onAddToReject }
+                    />
+                  </div>
+                  <div className="col-sm-2" ></div>
+                </div>
+            ) :
+            this.props.userType === 'ADOPTER' ?
+            (
+              <MessageList />
+            ) :
+            null
+        }
+      </div>
+    )
   }
 };
 
