@@ -13,11 +13,6 @@ const InterestList = (props) => {
     <div>
       <table className="table table-striped">
           <tbody>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
             {
               interestList.map(pet => {
                return (
@@ -36,11 +31,13 @@ const InterestList = (props) => {
                     </ul>
                   </td>
                   <td>{
-                    messageList.map(el => el.petId).includes(pet.id) ?
-                      <div className="glyphicon larger glyphicon-heart larger" style={{color: 'green'}} /> :
+                    !messageList.map(el => el.petId).includes(pet.id) ?
                       <a className="btn btn-success" onClick={() => addMessage(pet.id)}>
                         Message {pet.name}!
-                      </a>
+                      </a> :
+                      messageList.filter(el => el.petId === pet.id)[0].adopter_message ?
+                      <div className="thumbnail"><p style={{color: 'green'}}>{messageList.filter(el => el.petId === pet.id)[0].adopter_message}</p></div> :
+                      <div className="glyphicon larger glyphicon-heart larger" style={{color: 'green'}} />
                   }</td>
                 </tr>
                )

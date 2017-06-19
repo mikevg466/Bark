@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchInterestUsers } from '../redux/userPet';
+import { fetchInterestUsers, sendMessage } from '../redux/userPet';
 
 // Component //
 
@@ -20,10 +20,6 @@ class MessageList extends React.Component{
       <div>
         <table className="table table-striped">
             <tbody>
-              <tr>
-                <th></th>
-                <th></th>
-              </tr>
               {
                 adoptionList.map((pet, idx) => {
                  return (
@@ -41,7 +37,7 @@ class MessageList extends React.Component{
                             { (
                               <div>
                                 <span>{el.userName}: </span>
-                                <form onSubmit={() => {}} name='Message'>
+                                <form onSubmit={(e) => {this.props.handleSubmit(e, el.userId, el.petId)}} name='Message'>
                                   <div>
                                     <label htmlFor="message"><small>Message</small></label>
                                     <input name="message" type="text" />
@@ -74,7 +70,11 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  updateInterestUserList: () => dispatch(fetchInterestUsers())
+  updateInterestUserList: () => dispatch(fetchInterestUsers()),
+  handleSubmit (evt, userId, petId) {
+    const message = evt.target.message.value;
+    dispatch(sendMessage(message, userId, petId));
+  }
 });
 
 export default connect(mapState, mapDispatch)(MessageList);

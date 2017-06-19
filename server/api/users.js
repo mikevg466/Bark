@@ -165,3 +165,11 @@ router.get('/interest/users/:petId', (req, res, next) => {
     })
     .catch(next);
 });
+
+
+router.post('/messages/:userId/:petId', (req, res, next) => {
+  PetInterest.findOne({ where: { userId: req.params.userId, petId: req.params.petId } })
+    .then(petInterest => petInterest.update({ adopter_message: req.body.message }))
+    .then(() => res.status(201).send('Successfully sent'))
+    .catch(next);
+});

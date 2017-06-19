@@ -145,3 +145,9 @@ export const addBasicMessage = petId =>
       .then(res => dispatch(getMessages(res.data)))
       .catch(console.error.bind(console));
   }
+
+export const sendMessage = (message, userId, petId) =>
+  (dispatch, getState) => {
+    return axios.post(`/api/users/messages/${userId}/${petId}`, {message: message})
+      .catch(console.error.bind(console));
+  }
