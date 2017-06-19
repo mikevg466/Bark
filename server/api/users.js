@@ -3,6 +3,7 @@ const db = require('../db');
 const User = require('../db/models/user');
 const Pet = require('../db/models/pet');
 const PetInterest = require('../db/models/pet_interest');
+const Promise = require('bluebird');
 
 module.exports = router;
 
@@ -132,5 +133,35 @@ router.post('/adoptions/:userId', (req, res, next) => {
     .then(pet => req.user.addAdopt(pet))
     .then(() => req.user.getAdopt())
     .then(adoptList => res.status(201).json(adoptList))
+    .catch(next);
+});
+
+// :petId
+router.get('/interest/users/:petId', (req, res, next) => {
+  Pet.findById(req.params.petId)
+    .then(pet => PetInterest.findAll({ where: {
+      petId: pet.id,
+      user_message: true
+    } }))
+    .then(petInterestList => {
+      return Promise.map(
+        petInterestList,
+        petInterest => User.findById(petInterest.userId)
+      )
+        .then(userList =>
+          {
+          return petInterestList
+            .map((petInterest, idx) => {
+              return Object.assign(
+                {},
+                petInterest.dataValues,
+                { userName: userList[idx].name }
+              );
+            })
+        })
+    })
+    .then(modifiedPetInterestList => {
+        return res.status(200).json(modifiedPetInterestList)
+    })
     .catch(next);
 });

@@ -12,7 +12,6 @@ const MessageList = (props) => {
             <tr>
               <th></th>
               <th></th>
-              <th></th>
             </tr>
             {
               adoptionList.map(pet => {
@@ -22,8 +21,6 @@ const MessageList = (props) => {
                     <div className="thumbnail list">
                       <img src={pet.image} />
                     </div>
-                  </td>
-                  <td>
                   </td>
                   <td>{
                     <ul>

@@ -1,10 +1,12 @@
 import axios from 'axios';
+import Promise from 'bluebird';
 
 //------- ACTIONS -------
 const GET_INTEREST_PETS = 'GET_INTEREST_PETS';
 const GET_REJECT_PETS = 'GET_REJECT_PETS';
 const GET_MESSAGES = 'GET_MESSAGES';
 const GET_ADOPTION_PETS = 'GET_ADOPTION_PETS';
+const GET_INTEREST_USERS = 'GET_INTEREST_USERS';
 const ADD_INTEREST_PET = 'ADD_INTEREST_PET';
 const ADD_REJECT_PET = 'ADD_REJECT_PET';
 
@@ -13,7 +15,8 @@ const ADD_REJECT_PET = 'ADD_REJECT_PET';
 const getInterestPets = interestList => ({ type: GET_INTEREST_PETS, interestList: interestList || [] });
 const getRejectPets = rejectList => ({ type: GET_REJECT_PETS, rejectList: rejectList || [] });
 const getMessages = messageList => ({ type: GET_MESSAGES, messageList: messageList || [] });
-const getAdoptionPets = adoptionList => ({ type: GET_ADOPTION_PETS, adoptionList: adoptionList || []});
+const getAdoptionPets = adoptionList => ({ type: GET_ADOPTION_PETS, adoptionList: adoptionList || [] });
+const getInterestUsers = interestUserList => ({ type: GET_INTEREST_USERS, interestUserList: interestUserList || [] });
 const addInterestPet = selectedPet => ({ type: ADD_INTEREST_PET, selectedPet });
 const addRejectPet = selectedPet => ({ type: ADD_REJECT_PET, selectedPet });
 
@@ -24,6 +27,7 @@ const initState = {
   rejectList: [],
   messageList: [],
   adoptionList: [],
+  interestUserList: [],
 };
 
 
@@ -46,6 +50,10 @@ export default function (state = initState, action) {
 
     case GET_ADOPTION_PETS:
       newState.adoptionList = action.adoptionList;
+      break;
+
+    case GET_INTEREST_USERS:
+      newState.interestUserList = action.interestUserList;
       break;
 
     case ADD_INTEREST_PET:
@@ -98,6 +106,18 @@ export const fetchAdoptions = () =>
     return axios.get(`/api/users/adoptions/${user.id}`)
       .then(res => dispatch(getAdoptionPets(res.data)))
       .catch(console.error.bind(console));
+  }
+
+export const fetchInterestUsers = () =>
+  (dispatch, getState) => {
+    const { adoptionList } = getState().userPet;
+    return Promise.map(
+      adoptionList,
+      pet => axios.get(`/api/users/interest/users/${pet.id}`)
+    )
+    .then(resList => resList.map(res => res.data))
+    .then(resList => dispatch(getInterestUsers(resList)))
+    .catch(console.error.bind(console));
   }
 
 export const addInterest = () =>
