@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PetSwipe from '../components/PetSwipe';
 import { addInterest, addReject } from '../redux/userPet';
 import { selectRandomPet } from '../redux/pet';
-import MessageList from '../components/MessageList';
+import MessageList from '../containers/MessageList';
 
 
 class UserHome extends React.Component{
@@ -47,7 +47,6 @@ class UserHome extends React.Component{
       (
         <div>
           <MessageList
-            adoptionList={ this.props.adoptionList }
           />
         </div>
       ) :
@@ -59,7 +58,8 @@ const mapState = state => ({
   userType: state.user.type,
   email: state.user.email,
   selectedPet: state.pet.selectedPet,
-  adoptionList: state.userPet.adoptionList
+  adoptionList: state.userPet.adoptionList,
+  interestUserList: state.userPet.interestUserList
 });
 
 const mapDispatch = dispatch => ({
@@ -74,5 +74,6 @@ UserHome.propTypes = {
   userType: PropTypes.string,
   email: PropTypes.string,
   selectedPet: PropTypes.object,
-  adoptionList: PropTypes.array
+  adoptionList: PropTypes.array,
+  interestUserList: PropTypes.array
 };

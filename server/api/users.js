@@ -155,7 +155,7 @@ router.get('/interest/users/:petId', (req, res, next) => {
               return Object.assign(
                 {},
                 petInterest.dataValues,
-                { userName: userList[idx].name }
+                { userName: userList[idx].email }
               );
             })
         })
