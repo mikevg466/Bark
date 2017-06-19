@@ -269,4 +269,46 @@ describe('User routes', () => {
     });
   }); // describe('/api/users/adoptions/:userId')
 
+  describe('/api/users/interest/users/:petId', () => {
+    let curUser, testOne, curPetInterest;
+    beforeEach('create test user and pets and sets associations', () => {
+      return db.sync({ force: true })
+        .then(() => Promise.all([
+          User.create(testUser),
+          User.create({
+            name: 'secondMike',
+            email: 'secondMike.com',
+            password: 'test'
+          }),
+          Pet.create(testPetList[0])
+        ]))
+        .then(([user, userTwo, petOne]) => {
+          curUser = user;
+          testOne = petOne;
+          return Promise.all([
+            user.addInterest(petOne),
+            userTwo.addInterest(petOne)
+          ]);
+        })
+        .then(() => PetInterest.findOne({ where: { userId: curUser.id } }))
+        .then(petInterest => {
+          curPetInterest = petInterest;
+          return petInterest.update({user_message: true})
+        });
+    });
+
+    it('GET returns an array of users that left messages', () => {
+      return agent.get(`/api/users/interest/users/${testOne.id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.a.lengthOf(1);
+          expect(res.body[0].userId).to.equal(curPetInterest.userId);
+          expect(res.body[0].petId).to.equal(curPetInterest.petId);
+          expect(res.body[0].userName).to.equal(curUser.name);
+        });
+    });
+
+  }); // end describe('/api/users/interest/users/:petId')
+
 }); // end describe('User routes')

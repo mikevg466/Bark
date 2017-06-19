@@ -16,6 +16,8 @@ describe('UserPet reducer', () => {
       interestList: [],
       rejectList: [],
       messageList: [],
+      adoptionList: [],
+      interestUserList: [],
     });
   });
 
